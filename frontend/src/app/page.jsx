@@ -2,59 +2,94 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Smartphone, Mail, ArrowRight } from 'lucide-react';
+import { Shield, Lock, Smartphone, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="text-center text-white max-w-4xl">
+    <div className="text-center text-white max-w-5xl w-full mx-auto py-12 px-4">
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
       >
-        <div className="inline-block p-3 bg-white/10 rounded-2xl mb-6 backdrop-blur-sm border border-white/20">
-          <Shield className="w-12 h-12 text-blue-300" />
-        </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
-          Secure <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-300">Authentication</span>
-        </h1>
-        <p className="text-xl md:text-2xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
-          The ultimate full-stack solution for modern web apps. 
-          Featuring JWT, Email & SMS OTP, and a premium user experience.
-        </p>
+        <motion.div variants={itemVariants} className="flex justify-center mb-8">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-fuchsia-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative p-4 bg-slate-900/50 rounded-2xl backdrop-blur-xl border border-white/10">
+              <Shield className="w-12 h-12 text-purple-400" />
+            </div>
+          </div>
+        </motion.div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
-          <Link href="/register" className="px-8 py-4 bg-white text-purple-700 font-bold rounded-2xl hover:bg-white/90 transition-all flex items-center justify-center gap-2 text-lg shadow-xl hover:scale-105 active:scale-95">
-            Get Started <ArrowRight className="w-5 h-5" />
-          </Link>
-          <Link href="/login" className="px-8 py-4 bg-white/10 border border-white/20 text-white font-bold rounded-2xl hover:bg-white/20 transition-all text-lg backdrop-blur-md shadow-xl hover:scale-105 active:scale-95">
-            Login
-          </Link>
-        </div>
-      </motion.div>
+        <motion.h1 variants={itemVariants} className="text-5xl md:text-8xl font-black mb-6 tracking-tight leading-tight">
+          Modern <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400">Security</span>
+          <br className="hidden md:block" /> Simplified.
+        </motion.h1>
 
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 1 }}
-        className="grid md:grid-cols-3 gap-8 text-left"
-      >
-        <div className="glass p-6 rounded-2xl">
-          <Lock className="w-8 h-8 mb-4 text-blue-300" />
-          <h3 className="text-xl font-bold mb-2">JWT Security</h3>
-          <p className="text-white/60">Stateless authentication with secure JSON Web Tokens for cross-domain safety.</p>
-        </div>
-        <div className="glass p-6 rounded-2xl">
-          <Mail className="w-8 h-8 mb-4 text-purple-300" />
-          <h3 className="text-xl font-bold mb-2">Email OTP</h3>
-          <p className="text-white/60">Verified registration via Nodemailer and Gmail SMTP integration.</p>
-        </div>
-        <div className="glass p-6 rounded-2xl">
-          <Smartphone className="w-8 h-8 mb-4 text-green-300" />
-          <h3 className="text-xl font-bold mb-2">SMS OTP</h3>
-          <p className="text-white/60">Twilio integration for mobile-first security and instant verification.</p>
-        </div>
+        <motion.p variants={itemVariants} className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+          The most secure and visually stunning full-stack authentication solution. 
+          Built with JWT, Multi-channel OTP, and Next.js.
+        </motion.p>
+
+        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-24">
+          <Link href="/register" className="btn-primary group">
+            Get Started <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <Link href="/login" className="btn-secondary">
+            Sign In
+          </Link>
+        </motion.div>
+
+        <motion.div 
+          variants={itemVariants}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left"
+        >
+          <FeatureCard 
+            icon={<Lock className="w-6 h-6 text-purple-400" />}
+            title="JWT Security"
+            description="Enterprise-grade session management using secure JSON Web Tokens."
+          />
+          <FeatureCard 
+            icon={<Mail className="w-6 h-6 text-purple-400" />}
+            title="Email Verification"
+            description="Seamless onboarding with instant OTP verification via email."
+          />
+          <FeatureCard 
+            icon={<Smartphone className="w-6 h-6 text-fuchsia-400" />}
+            title="SMS OTP"
+            description="Two-factor security with Twilio integration for mobile verification."
+          />
+        </motion.div>
       </motion.div>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }) {
+  return (
+    <div className="glass-card group hover:border-purple-500/30 transition-all duration-500">
+      <div className="mb-4 p-2 w-fit bg-white/5 rounded-lg border border-white/10 group-hover:scale-110 transition-transform duration-500">
+        {icon}
+      </div>
+      <h3 className="text-xl font-bold mb-2 text-white/90">{title}</h3>
+      <p className="text-slate-400 leading-relaxed text-sm">
+        {description}
+      </p>
     </div>
   );
 }
