@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
             },
           }}
         />
-        <main className="min-h-screen flex items-center justify-center p-4 md:p-8">
+        <main className="min-h-screen flex items-center justify-center">
           {children}
         </main>
       </body>
