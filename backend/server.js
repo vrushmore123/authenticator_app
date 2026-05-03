@@ -8,12 +8,18 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
+// ✅ CORS FIRST (important)
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://authenticator-app-indol.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
+
+// ✅ Handle preflight requests (VERY IMPORTANT)
+app.options('*', cors());
+
+// Middleware
+app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
