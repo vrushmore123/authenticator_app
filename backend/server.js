@@ -10,7 +10,7 @@ const app = express();
 
 // ✅ 1. CORS FIRST (before everything)
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://authenticator-app-indol.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
