@@ -1,22 +1,24 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
 const sendEmail = async (options) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    const mailOptions = {
-        from: `"Antigravity Auth" <${process.env.EMAIL_USER}>`,
+    const msg = {
         to: options.email,
+        from: process.env.EMAIL_FROM, // Use the email address or domain you verified with SendGrid
         subject: options.subject,
-        html: options.html
+        html: options.html,
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+        await sgMail.send(msg);
+    } catch (error) {
+        console.error('SendGrid Error:', error);
+        if (error.response) {
+            console.error(error.response.body);
+        }
+        throw new Error('Email could not be sent');
+    }
 };
 
 module.exports = sendEmail;
