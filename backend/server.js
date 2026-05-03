@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 const dns = require('dns');
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
-// Force IPv4 first to solve DNS SRV issues on Windows
 if (dns.setDefaultResultOrder) {
     dns.setDefaultResultOrder('ipv4first');
 }
