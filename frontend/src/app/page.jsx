@@ -2,94 +2,132 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Smartphone, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
+
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
+});
+
+const features = [
+  { index: '01', title: 'JWT Sessions',   description: 'Stateless, cryptographically signed tokens. No session store required.' },
+  { index: '02', title: 'Email OTP',      description: 'Transactional verification delivered instantly at onboarding.' },
+  { index: '03', title: 'SMS Two-Factor', description: 'Twilio-powered mobile verification as a second authentication layer.' },
+];
+
+const specs = [
+  { label: 'Protocol',   value: 'JWT / RS256' },
+  { label: 'OTP delivery', value: 'Email + SMS' },
+  { label: 'Framework',  value: 'Next.js 14' },
+  { label: 'Stack',      value: 'Node · Mongo · Twilio' },
+];
 
 export default function Home() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
   return (
-    <div className="text-center text-white max-w-5xl w-full mx-auto py-12 px-4">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <motion.div variants={itemVariants} className="flex justify-center mb-8">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-fuchsia-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative p-4 bg-slate-900/50 rounded-2xl backdrop-blur-xl border border-white/10">
-              <Shield className="w-12 h-12 text-purple-400" />
-            </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+        html, body { margin: 0; padding: 0; background: #f0ede6; overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; }
+        .fd { font-family: 'Cormorant Garamond', serif; }
+        .fm { font-family: 'IBM Plex Mono', monospace; }
+        .btn-solid { background: #0d0d0d; color: #f0ede6; padding: 13px 28px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: opacity .15s; display: inline-block; }
+        .btn-solid:hover { opacity: 0.7; }
+        .btn-outline { border: 1px solid #0d0d0d; color: #0d0d0d; padding: 13px 28px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background .15s, color .15s; display: inline-block; }
+        .btn-outline:hover { background: #0d0d0d; color: #f0ede6; }
+        .nav-link { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #888; text-decoration: none; transition: color .15s; }
+        .nav-link:hover { color: #0d0d0d; }
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .spec-panel { border-left: none !important; border-top: 1px solid #d6d3cc; padding-left: 0 !important; padding-top: 2rem !important; }
+          .feature-row { grid-template-columns: 2.5rem 1fr !important; }
+          .feature-desc { display: none; }
+        }
+      `}</style>
+
+      <div style={{ minHeight: '100vh', width: '100%', background: '#f0ede6', color: '#0d0d0d', display: 'flex', flexDirection: 'column' }}>
+
+        {/* Nav */}
+        <motion.header {...fade(0)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.8rem 5vw', borderBottom: '1px solid #d6d3cc' }}>
+          <span className="fm" style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase' }}>AuthKit</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <Link href="/login" className="nav-link">Sign in</Link>
+            <Link href="/register" className="btn-solid" style={{ padding: '10px 22px' }}>Register</Link>
           </div>
-        </motion.div>
+        </motion.header>
 
-        <motion.h1 variants={itemVariants} className="text-5xl md:text-8xl font-black mb-6 tracking-tight leading-tight">
-          Modern <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400">Security</span>
-          <br className="hidden md:block" /> Simplified.
-        </motion.h1>
+        {/* Hero */}
+        <main className="hero-grid" style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '68vh' }}>
 
-        <motion.p variants={itemVariants} className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-          The most secure and visually stunning full-stack authentication solution. 
-          Built with JWT, Multi-channel OTP, and Next.js.
-        </motion.p>
+          {/* Left */}
+          <div style={{ padding: '5rem 4vw 5rem 5vw', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <motion.p {...fade(0.08)} className="fm" style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#d4400a', marginBottom: '1.8rem' }}>
+              Full-stack authentication
+            </motion.p>
 
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-24">
-          <Link href="/register" className="btn-primary group">
-            Get Started <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link href="/login" className="btn-secondary">
-            Sign In
-          </Link>
-        </motion.div>
+            <motion.h1 {...fade(0.15)} className="fd" style={{ fontSize: 'clamp(3.2rem, 5vw, 5.8rem)', fontWeight: 700, lineHeight: 0.93, letterSpacing: '-0.01em', marginBottom: '2.2rem' }}>
+              Security that<br />
+              <em style={{ fontWeight: 400, fontStyle: 'italic', color: '#d4400a' }}>doesn't</em><br />
+              get in the way.
+            </motion.h1>
 
-        <motion.div 
-          variants={itemVariants}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left"
-        >
-          <FeatureCard 
-            icon={<Lock className="w-6 h-6 text-purple-400" />}
-            title="JWT Security"
-            description="Enterprise-grade session management using secure JSON Web Tokens."
-          />
-          <FeatureCard 
-            icon={<Mail className="w-6 h-6 text-purple-400" />}
-            title="Email Verification"
-            description="Seamless onboarding with instant OTP verification via email."
-          />
-          <FeatureCard 
-            icon={<Smartphone className="w-6 h-6 text-fuchsia-400" />}
-            title="SMS OTP"
-            description="Two-factor security with Twilio integration for mobile verification."
-          />
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
+            <motion.p {...fade(0.22)} className="fm" style={{ fontSize: 12, color: '#666', lineHeight: 1.9, maxWidth: '36ch', marginBottom: '2.8rem', letterSpacing: '0.02em' }}>
+              JWT sessions, email OTP, and SMS two-factor — wired into Next.js from the start.
+            </motion.p>
 
-function FeatureCard({ icon, title, description }) {
-  return (
-    <div className="glass-card group hover:border-purple-500/30 transition-all duration-500">
-      <div className="mb-4 p-2 w-fit bg-white/5 rounded-lg border border-white/10 group-hover:scale-110 transition-transform duration-500">
-        {icon}
+            <motion.div {...fade(0.28)} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <Link href="/register" className="btn-solid">Get started →</Link>
+              <Link href="/login" className="btn-outline">Sign in</Link>
+            </motion.div>
+          </div>
+
+          {/* Right — spec panel */}
+          <motion.div
+            className="spec-panel"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.1, delay: 0.25 }}
+            style={{ borderLeft: '1px solid #d6d3cc', padding: '5rem 5vw 5rem 4vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2.8rem' }}
+          >
+            {specs.map((item, i) => (
+              <motion.div key={item.label} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}>
+                <p className="fm" style={{ fontSize: 10, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#aaa', marginBottom: '0.45rem' }}>{item.label}</p>
+                <p className="fd" style={{ fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', lineHeight: 1 }}>{item.value}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </main>
+
+        {/* Features */}
+        <section style={{ padding: '0 5vw 4rem', borderTop: '1px solid #d6d3cc' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.6rem 0 2.2rem' }}>
+            <span className="fm" style={{ fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#aaa', whiteSpace: 'nowrap' }}>What's included</span>
+            <div style={{ flex: 1, height: 1, background: '#d6d3cc' }} />
+          </div>
+
+          {features.map((f, i) => (
+            <motion.div
+              key={f.index}
+              className="feature-row"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.5 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+              style={{ display: 'grid', gridTemplateColumns: '3rem 1fr 2.5fr', gap: '0 3vw', alignItems: 'start', padding: '1.6rem 0', borderBottom: '1px solid #d6d3cc' }}
+            >
+              <span className="fm" style={{ fontSize: 10, color: '#bbb', paddingTop: 3 }}>{f.index}</span>
+              <span className="fd" style={{ fontSize: '1.3rem', fontWeight: 600, lineHeight: 1.2 }}>{f.title}</span>
+              <span className="fm feature-desc" style={{ fontSize: 11, color: '#666', lineHeight: 1.85, letterSpacing: '0.02em' }}>{f.description}</span>
+            </motion.div>
+          ))}
+        </section>
+
+        {/* Footer */}
+        <motion.footer {...fade(0.6)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.4rem 5vw', borderTop: '1px solid #d6d3cc' }}>
+          <span className="fm" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#aaa' }}>© {new Date().getFullYear()} AuthKit</span>
+          <span className="fm" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#d4400a' }}>Built with Next.js</span>
+        </motion.footer>
+
       </div>
-      <h3 className="text-xl font-bold mb-2 text-white/90">{title}</h3>
-      <p className="text-slate-400 leading-relaxed text-sm">
-        {description}
-      </p>
-    </div>
+    </>
   );
 }
