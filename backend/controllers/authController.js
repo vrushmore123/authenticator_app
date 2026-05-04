@@ -16,8 +16,10 @@ const signToken = (id) => {
 };
 
 exports.register = async (req, res) => {
+    console.log('Register request received:', req.body);
     try {
         const { name, email, phoneNumber, password, otpMethod } = req.body;
+
 
         // Check if user already exists
         const existingUser = await User.findOne({ $or: [{ email }, { phoneNumber }] });

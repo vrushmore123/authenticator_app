@@ -1,24 +1,34 @@
-const sgMail = require('@sendgrid/mail');
+const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    console.log('Attempting to send email to:', options.email);
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, // use SSL
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
 
-    const msg = {
+    console.log('Transporter created for:', process.env.EMAIL_USER);
+
+    const mailOptions = {
+
+        from: `"Authenticator App" <${process.env.EMAIL_USER}>`,
         to: options.email,
-        from: process.env.EMAIL_FROM, // Use the email address or domain you verified with SendGrid
         subject: options.subject,
         html: options.html,
     };
 
     try {
-        await sgMail.send(msg);
+        await transporter.sendMail(mailOptions);
     } catch (error) {
-        console.error('SendGrid Error:', error);
-        if (error.response) {
-            console.error(error.response.body);
-        }
+        console.error('Nodemailer Error:', error);
         throw new Error('Email could not be sent');
     }
 };
 
 module.exports = sendEmail;
+
